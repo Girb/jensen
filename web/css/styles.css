@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 'sa-digital-number';
+    src: url('../resources/font/DigitalNumbers-Regular.eot');
+  }
+  @font-face {
+    font-family: 'sa-digital-number';
+    src: url('../resources/font/DigitalNumbers-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+body { background-color: black; color: #ccc; font-family: Arial, Helvetica, sans-serif; margin: 0; padding: 0; }
+
+.standings { margin: auto; }
+
+.standings th { text-align: left; font-weight: normal; text-transform: uppercase; color: #888; }
+.standings td, .standings th { padding: 0 8px; }
+.standings td.n, .standings th.n { text-align: right; }
+
+.corona { font-size: 20px; background-color: #333; }
+.corona table { margin: auto; }
+.corona .round td { padding: 8px 24px; text-align: center; }
+.corona .round td.s { font-family: sa-digital-number; font-size: 24px; color: #e6ffac; text-shadow: 0 0 12px #87f324, 0 0 18px #288903; }
+
+.corona .lane { display: flex; flex-direction: row; padding: 16px 0; }
+.corona .lane .name { width: 200px; margin-right: 16px; }
+.corona .lane .s, .corona .lane .total { font-family: sa-digital-number; font-size: 24px; color: #e6ffac; text-shadow: 0 0 12px #87f324, 0 0 18px #288903; }
+.corona .lane .s { opacity: 0; }
+.corona .lane .s.reveal { opacity: 1; transition: all 1s; }
+.corona .lane .total { margin-left: 24px; }
