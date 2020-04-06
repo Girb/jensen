@@ -44,6 +44,22 @@ class CoronaLaneView extends View {
     initialize(options) {
         this.reveal = 0;
     }
+    get events() {
+        return {
+            'click .name': 'advance'
+        };
+    }
+    advance(e) {
+        if (this.reveal === 10) {
+            e.target.disabled = true;
+            const d = new Date(this.player.date);
+            e.target.innerHTML += ' ' + d.toLocaleDateString();
+        } else {
+            this.el.getElementsByClassName('r' + this.reveal)[0].classList.add('reveal');
+            this.reveal++;
+            this.recalc();
+        }
+    }
     recalc() {
         const revealed = this.player.scores.slice(0, this.reveal);
         const sum = revealed.reduce((sum, x) => sum + x);
@@ -62,18 +78,6 @@ class CoronaLaneView extends View {
             this.append(div(s, { className: 's r' + idx }));
         });
         this.append(div(0, { className: 'total' }));
-        btn.addEventListener('click', e => {
-            if (this.reveal === 10) {
-                e.target.disabled = true;
-                const d = new Date(this.player.date);
-                e.target.innerHTML += ' ' + d.toLocaleDateString();
-            } else {
-                this.el.getElementsByClassName('r' + this.reveal)[0].classList.add('reveal');
-                this.reveal++;
-                this.recalc();
-            }
-        });
-        document.documentElement.getel
         return this;
     }
 }

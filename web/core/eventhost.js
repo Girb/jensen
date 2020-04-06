@@ -1,7 +1,7 @@
 export default class EventHost {
     constructor() {
-        this.listeners = [];
-        this.events = [];
+        this._listeners = [];
+        this._events = [];
     }
     on(type, listener, context) {
         this._addListener(type, listener, false, context);
@@ -10,17 +10,17 @@ export default class EventHost {
         this._addListener(type, listener, true, context);
     }
     off(eventType, listenerFunc) {
-        const typeidx = this.events.indexOf(eventType);
+        const typeidx = this._events.indexOf(eventType);
         const hasType = eventType && typeidx !== -1;
         if( !hasType ) return;
 
         if( !listenerFunc ) {
-            delete this.listeners[eventType];
-            this.events.splice(typeidx, 1);
+            delete this._listeners[eventType];
+            this._events.splice(typeidx, 1);
         } else {
             (function() {
                 const removedEvents = [];
-                const typeListeners = this.listeners[eventType];
+                const typeListeners = this._listeners[eventType];
                 typeListeners.forEach(function(f, idx) {
                     if( f.f === listenerFunc ) {
                         removedEvents.unshift(idx);
@@ -30,8 +30,8 @@ export default class EventHost {
                     typeListeners.splice(idx, 1);
                 });
                 if( !typeListeners.length ) {
-                    this.events.splice(typidx, 1);
-                    delete this.listeners[eventType];
+                    this._events.splice(typidx, 1);
+                    delete this._listeners[eventType];
                 }
             }.bind(this))();
         }
@@ -43,8 +43,8 @@ export default class EventHost {
         this._applyEvents(type, eventArgs);
     }
     destroy() {
-        this.listeners = [];
-        this.events = [];
+        this._listeners = [];
+        this._events = [];
     }
     _addListener(type, listener, once, context) {
         if( typeof listener !== 'function' ) {
@@ -52,15 +52,15 @@ export default class EventHost {
         }
 
         var x = {once, context, f: listener};
-        if( this.events.indexOf(type) === -1 ) {
-            this.listeners[type] = [x];
-            this.events.push(type);
+        if( this._events.indexOf(type) === -1 ) {
+            this._listeners[type] = [x];
+            this._events.push(type);
         } else {
-            this.listeners[type].push(x);
+            this._listeners[type].push(x);
         }
     }
     _applyEvents(eventType, eventArguments) {
-        const typeListeners = this.listeners[eventType];
+        const typeListeners = this._listeners[eventType];
         if( !typeListeners || !typeListeners.length ) return;
 
         var removableListeners = [];

@@ -1,7 +1,7 @@
 import db from '../db/index.js';
 
 const tablesql = `
-    SELECT sl.etternavn, sl.nick, avg(poengsum) as snitt, count(poengsum) / 2 as turnup, 0 as "turnupPoints", 0 as "avgPoints"
+    SELECT sl.etternavn, sl.nick, round(avg(poengsum)::numeric, 2) as snitt, count(poengsum) / 2 as turnup, 0 as "turnupPoints", 0 as "avgPoints"
     FROM tbl_tier t
     INNER JOIN tbl_slagning s on t.slagning_id = s.slagning_id
     INNER JOIN tbl_slager sl on t.slager_id = sl.slager_id
