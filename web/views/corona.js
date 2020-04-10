@@ -1,5 +1,5 @@
 import View from '../core/view.js';
-import { div, tr, th, td, empty } from '../core/html.js';
+import { div, tr, th, td, h1, ul, li, button, empty } from '../core/html.js';
 
 
 class CoronaHeaderView extends View {
@@ -50,14 +50,15 @@ class CoronaLaneView extends View {
         };
     }
     advance(e) {
-        if (this.reveal === 10) {
-            e.target.disabled = true;
-            const d = new Date(this.player.date);
-            e.target.innerHTML += ' ' + d.toLocaleDateString();
-        } else {
+        if (this.reveal < 10) {
             this.el.getElementsByClassName('r' + this.reveal)[0].classList.add('reveal');
             this.reveal++;
             this.recalc();
+            if (this.reveal === 10) {
+                e.target.disabled = true;
+                const d = new Date(this.player.date);
+                e.target.innerHTML += ' (' + d.toLocaleDateString() + ')';
+            }
         }
     }
     recalc() {
@@ -86,22 +87,52 @@ class CoronaRoundView extends View {
     get className() { return 'round'; }
     render() {
         empty(this.el);
-        Promise.all([
-            fetch(`http://localhost:3000/game/randomround/${this.player1id}`).then(r => r.json()),
-            fetch(`http://localhost:3000/game/randomround/${this.player2id}`).then(r => r.json())
-        ])
-        .then(([p1, p2]) => {
-            const players = [p1, p2];
+        const calls = this.playerids.map(pid => fetch(`http://localhost:3000/game/randomround/${pid}`).then(r => r.json()));
+        Promise.all(calls)
+        .then()
+        .then(ps => {
+            const players = ps;
             players.forEach(player => {
                 this.append(new CoronaLaneView({ player }).render().el);
             });
-            // const tbl = document.createElement('table');
-            // this.el.appendChild(tbl);
-            // tbl.appendChild(new CoronaHeaderView({ players }).render().el);
-            // for (let i = 0; i < 10; i++) {
-            //     tbl.appendChild(new CoronaRowView({ index: i, players: [p1, p2] }).render().el);
-            // }
-            // tbl.appendChild(new CoronaTotalRowView({ players }).render().el);
+        });
+        return this;
+    }
+}
+
+class SelectParticipantsView extends View {
+    get className() { return 'selectparticipants'; }
+    get events() {
+        return {
+            'click .start': 'start'
+        };
+    }
+    start(e) {
+        e.preventDefault();
+        const playerids = [...this.all('input:checked')].map(chk => chk.value);
+        this.trigger('start', playerids);
+    }
+    render() {
+        empty(this.el);
+        this.el.appendChild(h1('Velg deltakere'));
+        const list = ul();
+        this.el.appendChild(list);
+        fetch(`http://localhost:3000/players`)
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(player => {
+                const chk = document.createElement('input');
+                chk.type = 'checkbox';
+                chk.id = 'c' + player.slager_id;
+                chk.value = player.slager_id;
+                const lbl = document.createElement('label');
+                lbl.setAttribute('for', 'c' + player.slager_id);
+                lbl.innerHTML = player.etternavn;
+                const itm = li([chk, lbl]);
+                list.appendChild(itm);
+            });
+            const btn = button('Start', { className: 'start' });
+            this.el.appendChild(btn);
         });
         return this;
     }
@@ -111,8 +142,18 @@ export default class CoronaView extends View {
     get className() { return 'corona'; }
     render() {
         this.empty();
-        const rr = new CoronaRoundView({ player1id: 11, player2id: 4 });
-        this.el.appendChild(rr.render().el);
+        //this.playerids = [1,3,5];
+        if (this.playerids) {
+            const rr = new CoronaRoundView({ playerids: this.playerids });
+            this.el.appendChild(rr.render().el);
+        } else {
+            const spv = new SelectParticipantsView();
+            spv.once('start', playerids => {
+                this.playerids = playerids;
+                this.render();
+            });
+            this.el.appendChild(spv.render().el);
+        }
         return this;
     }
 }

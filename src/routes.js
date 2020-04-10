@@ -1,5 +1,6 @@
 import standings from './api/standings.js';
 import game from './api/game.js';
+import players from './api/players.js';
 
 const routes = route => {
     route.get('/', (req, res) => {
@@ -11,6 +12,10 @@ const routes = route => {
 
     route.route('/game/randomround/:participantid')
         .get(game.randomRound);
+
+    route.route('/players')
+        .get(players.getAll);
+
 
 };
 

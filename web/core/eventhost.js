@@ -37,7 +37,9 @@ export default class EventHost {
         }
     }
     trigger(type) {
-        for( let len = arguments.length, eventArgs = Array(len > 1 ? len - 1 : 0), key = 1; key < len; key++ ) {
+        const len = arguments.length;
+        const eventArgs = Array(len > 1 ? len - 1 : 0);
+        for( let key = 1; key < len; key++ ) {
             eventArgs[key-1] = arguments[key];
         }
         this._applyEvents(type, eventArgs);

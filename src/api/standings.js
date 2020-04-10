@@ -45,7 +45,7 @@ const setTotals = tbl => {
 };
 
 const standings = {
-    byYear(req, res, nest) {
+    byYear(req, res, next) {
         const year = req.params.year;
         db.any(tablesql, year)
         .then(data => {

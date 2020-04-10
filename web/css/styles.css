@@ -23,8 +23,20 @@ body { background-color: black; color: #ccc; font-family: Arial, Helvetica, sans
 .corona .round td.s { font-family: sa-digital-number; font-size: 24px; color: #e6ffac; text-shadow: 0 0 12px #87f324, 0 0 18px #288903; }
 
 .corona .lane { display: flex; flex-direction: row; padding: 16px 0; }
-.corona .lane .name { width: 200px; margin-right: 16px; }
+.corona .lane .name { width: 200px; margin: 0 16px; }
 .corona .lane .s, .corona .lane .total { font-family: sa-digital-number; font-size: 24px; color: #e6ffac; text-shadow: 0 0 12px #87f324, 0 0 18px #288903; }
 .corona .lane .s { opacity: 0; }
 .corona .lane .s.reveal { opacity: 1; transition: all 1s; }
 .corona .lane .total { margin-left: 24px; }
+
+.corona button.name { background-color: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); color: #e6ffac; cursor: pointer; border-radius: 2px; text-transform: uppercase; }
+.corona button.name:not(:disabled):hover { box-shadow: 0 0 6px #e6ffac; }
+.corona button.name:focus { outline: none; box-shadow: 0 0 6px #e6ffac; }
+.corona button.name:disabled { outline: none; box-shadow: none; border: 1px solid transparent; background-color: transparent; }
+
+.corona .selectparticipants { padding: 16px; }
+.corona .selectparticipants h1 { margin: 8px 0; }
+.corona .selectparticipants ul { padding-left: 0; }
+.corona .selectparticipants li { list-style-type: none; }
+.corona .selectparticipants button.start { width: 200px; background-color: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.12); color: #e6ffac; cursor: pointer; border-radius: 2px; text-transform: uppercase; }
+.corona .selectparticipants button.start:not(:disabled):hover { box-shadow: 0 0 6px #e6ffac; }

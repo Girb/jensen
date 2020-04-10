@@ -39,6 +39,30 @@ export function span(content, options) {
     return create('span', content, options);
 }
 
+export function h1(content, options) {
+    return create('h1', content, options);
+}
+
+export function h2(content, options) {
+    return create('h2', content, options);
+}
+
+export function h3(content, options) {
+    return create('h3', content, options);
+}
+
+export function ul(content, options) {
+    return create('ul', content, options);
+}
+
+export function li(content, options) {
+    return create('li', content, options);
+}
+
+export function button(content, options) {
+    return create('button', content, options);
+}
+
 export function empty(el) {
     while(el.lastChild) {
         el.removeChild(el.lastChild);
