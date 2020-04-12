@@ -13,6 +13,9 @@ const routes = route => {
     route.route('/game/randomround/:participantid')
         .get(game.randomRound);
 
+    route.route('/game/verifydata')
+        .get(game.verifyData);
+
     route.route('/players')
         .get(players.getAll);
 

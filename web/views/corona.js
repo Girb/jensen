@@ -49,25 +49,34 @@ class CoronaLaneView extends View {
             'click .name': 'advance'
         };
     }
-    advance(e) {
-        if (this.reveal < 10) {
-            this.el.getElementsByClassName('r' + this.reveal)[0].classList.add('reveal');
-            this.reveal++;
-            this.recalc();
-            if (this.reveal === 10) {
-                e.target.disabled = true;
-                const d = new Date(this.player.date);
-                e.target.innerHTML += ' (' + d.toLocaleDateString() + ')';
+    advance(e, all) {
+        if (!all && e.shiftKey) {
+            for (let i = this.reveal; i <= 10; i++) {
+                this.advance(e, true);
+            }
+        } else {
+            if (this.reveal < 10) {
+                this.el.getElementsByClassName('r' + this.reveal)[0].classList.add('reveal');
+                this.reveal++;
+                this.recalc();
+                if (this.reveal === 10) {
+                    e.target.disabled = true;
+                    const d = new Date(this.player.date);
+                    e.target.innerHTML += ' (' + d.toLocaleDateString() + ')';
+                }
             }
         }
     }
     recalc() {
-        const revealed = this.player.scores.slice(0, this.reveal);
+        const revealed = this.scores.slice(0, this.reveal);
         const sum = revealed.reduce((sum, x) => sum + x);
         const tot = this.el.getElementsByClassName('total')[0];
         empty(tot);
         tot.innerHTML = ''+sum;
 
+    }
+    shuffle(scores) {
+        return scores.map(a => [Math.random(),a]).sort((a,b) => a[0]-b[0]).map((a) => a[1]);
     }
     render() {
         empty(this.el);
@@ -75,7 +84,8 @@ class CoronaLaneView extends View {
         btn.innerHTML = this.player.nick;
         btn.classList.add('name');
         this.append(btn);
-        this.player.scores.forEach((s, idx) => {
+        this.scores = this.shuffle(this.player.scores);
+        this.scores.forEach((s, idx) => {
             this.append(div(s, { className: 's r' + idx }));
         });
         this.append(div(0, { className: 'total' }));
@@ -134,6 +144,24 @@ class SelectParticipantsView extends View {
             const btn = button('Start', { className: 'start' });
             this.el.appendChild(btn);
         });
+        return this;
+    }
+}
+
+export class CoronaNotesView extends View {
+    get className() { return 'coronanotes'; }
+    render() {
+        empty(this.el);
+        const ta = document.createElement('textarea');
+        ta.onkeydown = function(e) {
+            if (e.keyCode === 9 || e.which === 9) {
+                e.preventDefault();
+                const s = this.selectionStart;
+                this.value = this.value.substring(0, this.selectionStart) + '\t' + this.value.substring(this.selectionEnd);
+                this.selectionEnd = s + 1;
+            }
+        };
+        this.el.appendChild(ta);
         return this;
     }
 }

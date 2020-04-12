@@ -14,7 +14,7 @@ const randomRoundSql = `
 `;
  
 const game = {
-    randomRound(req, res, net) {
+    randomRound(req, res, next) {
         const participantid = req.params.participantid;
         db.any(randomRoundSql, participantid)
         .then(data => {
@@ -32,6 +32,19 @@ const game = {
         .catch(err => {
             console.log(err);
         });
+    },
+    verifyData(req, res, next) {
+        const msgs = [];
+        Object.keys(series).forEach(s => {
+            const score = parseInt(s);
+            for (let i = 0; i < 4; i++) {
+                const sum = series[s][i].reduce((sum, x) => sum + x);
+                if (sum !== score) {
+                    msgs.push('Score ' + s + ': res ' + i + ' is ' + sum);
+                }
+            }
+        });
+        res.json(msgs);
     }
 };
 
