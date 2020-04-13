@@ -1,5 +1,6 @@
 import View from '../core/view.js';
 import { div, tr, th, td, h1, ul, li, button, empty } from '../core/html.js';
+import { url } from '../util.js';
 
 
 class CoronaHeaderView extends View {
@@ -97,7 +98,7 @@ class CoronaRoundView extends View {
     get className() { return 'round'; }
     render() {
         empty(this.el);
-        const calls = this.playerids.map(pid => fetch(`http://localhost:3000/game/randomround/${pid}`).then(r => r.json()));
+        const calls = this.playerids.map(pid => fetch(url(`game/randomround/${pid}`)).then(r => r.json()));
         Promise.all(calls)
         .then()
         .then(ps => {
@@ -127,7 +128,7 @@ class SelectParticipantsView extends View {
         this.el.appendChild(h1('Velg deltakere'));
         const list = ul();
         this.el.appendChild(list);
-        fetch(`http://localhost:3000/players`)
+        fetch(url('players'))
         .then(response => response.json())
         .then(data => {
             data.forEach(player => {
