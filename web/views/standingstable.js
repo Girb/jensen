@@ -20,8 +20,9 @@ export default class StandingsTable extends View {
     get className() { return 'standings'; }
     render() {
         this.empty();
-        this.el.appendChild(tr([th('Navn'), th('Møtt', { className: 'n' }), th('P', { className: 'n' }), th('Snitt', { className: 'n' }), th('P'), th('Totalt', { className: 'n' })]));
-        fetch('http://localhost:3000/standings/2019')
+        this.el.appendChild(tr([th('Navn'), th('Mø', { className: 'n' }), th('P', { className: 'n' }), th('Snitt', { className: 'n' }), th('P'), th('Tot', { className: 'n' })]));
+        const y = new Date().getFullYear();
+        fetch(`/standings/${y}`)
         .then(response => {
             return response.json();
         })

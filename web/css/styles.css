@@ -14,7 +14,8 @@ body { background-color: black; color: #ccc; font-family: Arial, Helvetica, sans
 .standings { margin: auto; }
 
 .standings th { text-align: left; font-weight: normal; text-transform: uppercase; color: #888; }
-.standings td, .standings th { padding: 0 8px; }
+.standings td, .standings th { padding: 0 8px; white-space: nowrap;  }
+.standings td:first-child { width: 50%; }
 .standings td.n, .standings th.n { text-align: right; }
 
 .corona { font-size: 20px; background-color: #333; }
